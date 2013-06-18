@@ -7,3 +7,10 @@ unless `which vagrant`.include?("vagrant") && `vagrant -v`.include?('1.2.2')
     type "pkg"
   end
 end
+
+node['vagrant']['plugins'].each do |plugin|
+  execute "install vagrant plugin #{plugin}" do
+    command "vagrant plugin install #{plugin}"
+    not_if { `vagrant plugin list`.include?(plugin) }
+  end
+end
